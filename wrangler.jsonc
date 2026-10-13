@@ -1,0 +1,16 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "cianjur-space-landing",
+  "compatibility_date": "2026-10-14",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  },
+  "workers_dev": true,
+  "routes": [
+    { "pattern": "cianjur.space/*", "zone_name": "cianjur.space" }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}
