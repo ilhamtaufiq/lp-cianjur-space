@@ -1,0 +1,1000 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Produk dikosongkan dulu. Isi lagi dengan format berikut saat siap:
+// { name, url, desc, cta, status?, comingSoon? }
+// Urutan = prioritas tampil. Item pertama jadi tile utama.
+const products: {
+  name: string;
+  url: string;
+  desc: string;
+  cta: string;
+  status?: string;
+  comingSoon?: boolean;
+}[] = [
+  {
+    name: 'Polify',
+    url: 'https://polify.cianjur.space/',
+    desc: 'Buat file SHP polygon lokasi usaha atau kegiatan untuk OSS RBA dan Amdalnet, langsung dari browser tanpa ArcGIS atau QGIS.',
+    cta: 'Segera hadir',
+    comingSoon: true,
+  },
+];
+
+const hasProducts = products.length > 0;
+
+const services = [
+  {
+    title: 'Pembuatan aplikasi',
+    desc: 'Aplikasi mobile, website, web app, dan sistem bisnis atau pemerintahan, dari desain sampai rilis.',
+  },
+  {
+    title: 'SaaS',
+    desc: 'Produk berlangganan yang dibangun dan dikembangkan Cendera, siap dipakai tanpa membangun dari nol.',
+  },
+  {
+    title: 'Managed server hosting',
+    desc: 'Server untuk aplikasi Anda dikelola tim Cendera, supaya Anda bisa fokus pada produk.',
+  },
+];
+
+const steps = [
+  {
+    title: 'Diskusi kebutuhan',
+    desc: 'Ceritakan masalah dan target Anda. Kami bantu menentukan apa yang perlu dibuat.',
+  },
+  {
+    title: 'Bangun dan uji',
+    desc: 'Tim kami membangun aplikasi atau SaaS, lalu mengujinya bersama Anda sebelum rilis.',
+  },
+  {
+    title: 'Kelola dan jalankan',
+    desc: 'Setelah rilis, server dan aplikasi tetap kami kelola, dan Anda tinggal memakainya.',
+  },
+];
+
+// Garis kontur topografi untuk hero. Dibuat dari fungsi sinus supaya deterministik.
+const contours = Array.from({ length: 16 }, (_, i) => {
+  const base = 60 + i * 18;
+  let d = '';
+  for (let x = 0; x <= 1440; x += 30) {
+    const y = base + Math.sin(x / 190 + i * 0.42) * 22 + Math.cos(x / 83 - i * 0.27) * 9;
+    d += `${x === 0 ? 'M' : 'L'}${x} ${y.toFixed(1)} `;
+  }
+  return { d, opacity: (0.18 + i * 0.045).toFixed(2) };
+});
+---
+
+<BaseLayout
+  title="Cianjur Space — Pembuatan Aplikasi, SaaS, dan Managed Hosting"
+  description="Cianjur Space dari Cendera: jasa pembuatan aplikasi, SaaS, dan managed server hosting untuk aplikasi Anda."
+>
+  <a href="#main" class="skip-link">Lewati ke konten utama</a>
+
+  <header class="site-header">
+    <nav class="container nav" aria-label="Navigasi utama">
+      <a href="/" class="brand">
+        <img src="/logo-cianjur-space.svg" alt="" width="40" height="40" />
+        <span>Cianjur Space</span>
+      </a>
+      <div class="nav-links">
+        <a href="#layanan">Layanan</a>
+        <a href="#cara-kerja">Cara kerja</a>
+        <a href="#produk">Produk</a>
+        <a href="https://wa.me/628553333200" target="_blank" rel="noopener" class="btn btn-accent btn-sm">Chat kami</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="container hero-copy">
+        <h1>Dari ide sampai aplikasi berjalan.</h1>
+        <p class="lead">
+          Cendera membuat aplikasi dan SaaS untuk usaha dan instansi, lalu mengurus servernya setelah rilis.
+        </p>
+        <div class="actions">
+          <a href="#layanan" class="btn btn-accent">Lihat layanan</a>
+          <a href="https://wa.me/628553333200" target="_blank" rel="noopener" class="btn btn-outline">Chat WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="contours" aria-hidden="true">
+        <svg viewBox="0 0 1440 420" preserveAspectRatio="xMidYMid slice" focusable="false">
+          {contours.map((c, i) => (
+            <path
+              d={c.d}
+              pathLength="1"
+              fill="none"
+              stroke="#00D40E"
+              stroke-width="1.2"
+              opacity={c.opacity}
+              class="contour"
+              style={`--i:${i}`}
+            />
+          ))}
+          <circle cx="1080" cy="150" r="14" fill="#00D40E" />
+          <circle class="pulse" cx="1080" cy="150" r="46" fill="none" stroke="#00D40E" stroke-width="1" />
+          <circle class="pulse pulse-2" cx="1080" cy="150" r="46" fill="none" stroke="#00D40E" stroke-width="1" />
+        </svg>
+      </div>
+    </section>
+
+    <section id="layanan" class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Yang kami kerjakan</h2>
+          <p class="section-lead">Tiga layanan yang bisa dipakai sendiri-sendiri atau bersamaan.</p>
+        </div>
+        <ul class="catalog">
+          {
+            services.map((s) => (
+              <li class="item">
+                <div class="item-name">
+                  <h3>{s.title}</h3>
+                </div>
+                <p>{s.desc}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section id="cara-kerja" class="section section-alt" aria-labelledby="steps-title">
+      <div class="container">
+        <div class="section-head">
+          <h2 id="steps-title">Cara kami bekerja</h2>
+        </div>
+        <ol class="steps">
+          {
+            steps.map((s, i) => (
+              <li>
+                <span class="step-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                <h3>{s.title}</h3>
+                <p>{s.desc}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <section id="produk" class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Produk</h2>
+          <p class="section-lead">Produk SaaS buatan Cendera akan tampil di sini.</p>
+        </div>
+        {
+          hasProducts && (
+            <ul class="catalog">
+              {products.map((p) => (
+                <li class="item">
+                  <div class="item-name">
+                    {p.status && <span class="status-tag">{p.status}</span>}
+                    <h3>{p.name}</h3>
+                  </div>
+                  <p>{p.desc}</p>
+                  {p.comingSoon ? (
+                    <span class="open muted">Segera hadir</span>
+                  ) : (
+                    <a href={p.url} target="_blank" rel="noopener" class="open">
+                      {p.cta}
+                      <span class="visually-hidden">(membuka di tab baru)</span>
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="faq-title">
+      <div class="container split">
+        <h2 id="faq-title">Pertanyaan yang sering muncul</h2>
+        <div class="faq">
+          <details>
+            <summary>Apa saja yang bisa Cendera kerjakan?</summary>
+            <p>Pembuatan aplikasi mobile, website, web app, sistem bisnis atau pemerintahan, SaaS, dan managed server hosting.</p>
+          </details>
+          <details>
+            <summary>Apakah Cendera juga mengelola server setelah aplikasi rilis?</summary>
+            <p>Ya, layanan managed server hosting mencakup pengelolaan server untuk aplikasi yang sudah berjalan.</p>
+          </details>
+          <details>
+            <summary>Berapa biayanya?</summary>
+            <p>Tergantung kebutuhan. Ceritakan kebutuhan Anda lewat WhatsApp untuk mendiskusikannya.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-band" aria-labelledby="cta-title">
+      <div class="container cta-inner">
+        <div>
+          <h2 id="cta-title">Punya ide aplikasi yang ingin dijalankan?</h2>
+          <p>Ceritakan kebutuhan Anda lewat WhatsApp di 0855-3333-200.</p>
+        </div>
+        <a href="https://wa.me/628553333200" target="_blank" rel="noopener" class="btn btn-ink">Chat WhatsApp</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a href="/" class="brand">
+          <img src="/logo-cianjur-space.svg" alt="" width="32" height="32" />
+          <span>Cianjur Space</span>
+        </a>
+        <p class="muted">Bingung soal aplikasi dan server? Cendera mengurus dari awal sampai berjalan.</p>
+      </div>
+      <nav aria-label="Jelajahi">
+        <h3>Jelajahi</h3>
+        <ul>
+          <li><a href="#layanan">Layanan</a></li>
+          <li><a href="#cara-kerja">Cara kerja</a></li>
+          <li><a href="#produk">Produk</a></li>
+          {
+            products
+              .filter((p) => !p.comingSoon)
+              .map((p) => (
+                <li><a href={p.url} target="_blank" rel="noopener">{p.name}</a></li>
+              ))
+          }
+        </ul>
+      </nav>
+      <nav aria-label="Hubungi">
+        <h3>Hubungi</h3>
+        <ul>
+          <li><a href="https://wa.me/628553333200" target="_blank" rel="noopener">WhatsApp 0855-3333-200</a></li>
+          <li><a href="https://cendera.cianjur.space" target="_blank" rel="noopener">Profil Cendera</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="container copy">
+      <p>&copy; {new Date().getFullYear()} Cianjur Space. Dibuat oleh Cendera.</p>
+    </div>
+  </footer>
+
+  <style>
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    .muted {
+      color: var(--color-muted-foreground);
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    h1,
+    h2,
+    h3,
+    .brand,
+    .btn,
+    .nav-links,
+    .step-num,
+    .faq summary {
+      font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.035em;
+      margin: 0 0 1.75rem;
+      color: var(--color-ink);
+      text-wrap: balance;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+      margin: 0 0 1rem;
+      color: var(--color-ink);
+      text-wrap: balance;
+    }
+
+    h3 {
+      line-height: 1.2;
+      margin: 0;
+      color: var(--color-ink);
+    }
+
+    p {
+      max-width: 62ch;
+    }
+
+    .section {
+      padding: 6rem 0;
+    }
+
+    .section-alt {
+      background: var(--color-surface);
+    }
+
+    .section-head {
+      margin-bottom: 3rem;
+    }
+
+    .section-lead {
+      color: var(--color-muted-foreground);
+      margin: 0;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    /* header */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(10, 10, 10, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: var(--color-ink);
+      font-weight: 700;
+      font-size: 1.15rem;
+    }
+
+    .brand:hover {
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a:not(.btn) {
+      color: var(--color-muted-foreground);
+      font-size: 0.98rem;
+      transition: color var(--transition);
+    }
+
+    .nav-links a:not(.btn):hover {
+      color: var(--color-primary);
+      text-decoration: none;
+    }
+
+    /* buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      cursor: pointer;
+      padding: 0.9rem 1.5rem;
+      border-radius: 0.75rem;
+      font-weight: 700;
+      font-size: 1rem;
+      border: 2px solid transparent;
+      transition:
+        background-color var(--transition),
+        color var(--transition),
+        border-color var(--transition);
+    }
+
+    .btn:hover {
+      text-decoration: none;
+    }
+
+    .btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.92rem;
+    }
+
+    .btn-accent {
+      background: var(--color-accent);
+      color: var(--color-on-accent);
+      border-color: var(--color-accent);
+    }
+
+    .btn-accent:hover {
+      background: var(--color-primary-strong);
+      border-color: var(--color-primary-strong);
+    }
+
+    .btn-outline {
+      border-color: var(--color-muted-foreground);
+      color: var(--color-foreground);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .btn-ink {
+      background: var(--color-background);
+      color: var(--color-foreground);
+    }
+
+    .btn-ink:hover {
+      background: var(--color-muted);
+    }
+
+    /* hero: copy di atas, garis kontur sebagai latar */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 7rem 0 0;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-copy h1 {
+      max-width: 14ch;
+    }
+
+    .lead {
+      font-size: 1.2rem;
+      max-width: 50ch;
+      color: var(--color-muted-foreground);
+      margin: 0 0 2.5rem;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .contours {
+      margin-top: 3rem;
+      height: clamp(260px, 36vw, 420px);
+    }
+
+    .contours svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* hero motion: garis kontur tergambar, titik puncak berdenyut, teks naik perlahan */
+    .contour {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: draw 2.6s ease-out forwards;
+      animation-delay: calc(var(--i) * 90ms);
+    }
+
+    .pulse {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: pulse 3.2s ease-out infinite;
+    }
+
+    .pulse-2 {
+      animation-delay: 1.6s;
+    }
+
+    .hero-copy > * {
+      animation: rise 0.9s ease-out both;
+    }
+
+    .hero-copy > *:nth-child(2) {
+      animation-delay: 0.12s;
+    }
+
+    .hero-copy > *:nth-child(3) {
+      animation-delay: 0.24s;
+    }
+
+    @keyframes draw {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes pulse {
+      from {
+        transform: scale(0.4);
+        opacity: 0.8;
+      }
+      to {
+        transform: scale(2);
+        opacity: 0;
+      }
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .contour,
+      .pulse,
+      .hero-copy > * {
+        animation: none;
+      }
+
+      .contour {
+        stroke-dashoffset: 0;
+      }
+
+      .pulse {
+        display: none;
+      }
+    }
+
+    /* services: tiga kolom dengan garis atas, bukan kartu */
+    .services {
+      display: grid;
+      gap: 0;
+    }
+
+    .service {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+      padding: 2.25rem 0;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .service:last-child {
+      border-bottom: 1px solid var(--color-border);
+    }
+
+
+    .service h3 {
+      font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+
+    .service p {
+      margin: 0;
+      color: var(--color-muted-foreground);
+    }
+
+    /* cara kerja: tiga langkah berurutan */
+    .steps {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2.5rem;
+      counter-reset: none;
+    }
+
+    .steps {
+      position: relative;
+      padding-top: 2.5rem;
+    }
+
+    /* garis penghubung, motif kontur dari hero */
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 1.5rem;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--color-border-strong);
+    }
+
+    .steps li {
+      position: relative;
+    }
+
+    .steps li::before {
+      content: '';
+      position: absolute;
+      top: calc(-1rem - 5.5px);
+      left: 0;
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      background: var(--color-primary);
+      transform: translateY(-1px);
+    }
+
+    .step-num {
+      display: block;
+      font-size: clamp(3rem, 6vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: var(--color-primary);
+      margin-bottom: 1rem;
+    }
+
+    .steps h3 {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .steps p {
+      margin: 0;
+      color: var(--color-muted-foreground);
+    }
+
+    /* bento produk: tile utama di posisi pertama */
+    .bento {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .tile {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      min-height: 220px;
+      padding: 2rem;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 1rem;
+      transition: border-color var(--transition);
+    }
+
+    .tile:hover {
+      border-color: var(--color-primary);
+    }
+
+    .tile h3 {
+      font-size: 1.5rem;
+    }
+
+    .tile p {
+      margin: 0;
+      color: var(--color-muted-foreground);
+      font-size: 0.98rem;
+    }
+
+    .tile .open {
+      margin-top: auto;
+      padding-top: 0.5rem;
+      font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .tile .open.muted {
+      color: var(--color-muted-foreground);
+    }
+
+    .status-tag {
+      align-self: flex-start;
+      font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.3rem 0.75rem;
+      border: 1px solid var(--color-primary);
+      border-radius: 999px;
+      color: var(--color-primary);
+    }
+
+    .tile-featured {
+      grid-column: span 2;
+      grid-row: span 2;
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: var(--color-on-primary);
+      padding: 2.75rem;
+      justify-content: flex-start;
+    }
+
+    .tile-featured:hover {
+      border-color: var(--color-foreground);
+    }
+
+    .tile-featured h3 {
+      font-size: clamp(2.2rem, 4vw, 3.25rem);
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: var(--color-on-primary);
+    }
+
+    .tile-featured p {
+      font-size: 1.2rem;
+      max-width: 36ch;
+      color: var(--color-on-primary);
+    }
+
+    .tile-featured .open {
+      color: var(--color-on-primary);
+      font-size: 1.1rem;
+    }
+
+    .tile-featured .status-tag {
+      border-color: var(--color-on-primary);
+      color: var(--color-on-primary);
+    }
+
+    /* produk: katalog berbaris, skala dari 1 sampai banyak item */
+    .catalog {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .catalog .item {
+      display: grid;
+      grid-template-columns: minmax(12rem, 1fr) minmax(0, 2fr) 9rem;
+      gap: 0.75rem 2rem;
+      align-items: center;
+      padding: 1.75rem 0.75rem;
+      margin: 0 -0.75rem;
+      border-bottom: 1px solid var(--color-border);
+      border-radius: 0.5rem;
+      transition: background-color var(--transition);
+    }
+
+    .catalog .item:hover {
+      background: var(--color-surface);
+    }
+
+    .catalog .item-name {
+      display: grid;
+      gap: 0.5rem;
+      justify-items: start;
+    }
+
+    .catalog .item h3 {
+      font-size: clamp(1.5rem, 2.6vw, 2rem);
+      letter-spacing: -0.02em;
+    }
+
+    .catalog .item p {
+      margin: 0;
+      color: var(--color-muted-foreground);
+    }
+
+    .catalog .item .open {
+      justify-self: end;
+      white-space: nowrap;
+      font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .catalog .item .open.muted {
+      color: var(--color-muted-foreground);
+    }
+
+    @media (max-width: 860px) {
+      .catalog .item {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+
+      .catalog .item .open {
+        justify-self: start;
+      }
+    }
+
+    /* faq */
+    .faq details {
+      border-top: 1px solid var(--color-border);
+      padding: 1.5rem 0;
+    }
+
+    .faq details:last-child {
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .faq summary {
+      cursor: pointer;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--color-ink);
+      list-style: none;
+    }
+
+    .faq summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq summary:focus-visible {
+      outline: 2px solid var(--color-ring);
+      outline-offset: 4px;
+    }
+
+    .faq summary::after {
+      content: '+';
+      float: right;
+      color: var(--color-primary);
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    .faq details[open] summary::after {
+      content: '–';
+    }
+
+    .faq p {
+      margin: 0.75rem 0 0;
+      color: var(--color-muted-foreground);
+    }
+
+    /* cta */
+    .cta-band {
+      background: var(--color-accent);
+      color: var(--color-on-accent);
+      padding: 5rem 0;
+    }
+
+    .cta-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .cta-band h2 {
+      color: var(--color-on-accent);
+      max-width: 22ch;
+    }
+
+    .cta-band p {
+      margin: 0;
+      color: var(--color-on-accent);
+    }
+
+    /* footer */
+    .site-footer {
+      background: var(--color-surface);
+      color: #d6dbe8;
+      padding: 3.5rem 0 1.5rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .site-footer .brand {
+      color: var(--color-foreground);
+    }
+
+    .site-footer .muted {
+      margin-top: 0.75rem;
+    }
+
+    .site-footer h3 {
+      font-size: 0.95rem;
+      color: var(--color-foreground);
+      margin: 0 0 0.75rem;
+    }
+
+    .site-footer ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .site-footer a {
+      color: #d6dbe8;
+    }
+
+    /* target sentuh minimal 44px untuk setiap link footer */
+    .site-footer ul a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+    }
+
+    .site-footer a:hover {
+      color: var(--color-primary);
+    }
+
+    .copy {
+      margin-top: 2.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--color-border);
+      font-size: 0.9rem;
+      color: var(--color-muted-foreground);
+    }
+
+    .copy p {
+      margin: 0;
+    }
+
+    /* responsive */
+    @media (max-width: 960px) {
+      .bento {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .tile-featured {
+        grid-column: span 2;
+        grid-row: span 1;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .split,
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .hero {
+        padding-top: 4rem;
+      }
+
+      .section {
+        padding: 4rem 0;
+      }
+
+      .steps,
+      .services {
+        gap: 2.5rem;
+      }
+
+      .nav-links a:not(.btn) {
+        display: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .bento {
+        grid-template-columns: 1fr;
+      }
+
+      .tile-featured {
+        grid-column: auto;
+      }
+    }
+  </style>
+</BaseLayout>
